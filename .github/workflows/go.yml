@@ -1,0 +1,118 @@
+name: Build app
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+
+  linux:
+    name: Build for linux and windows
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install dependencies
+      run: sudo apt-get install -y libgl1-mesa-dev xorg-dev make
+    - name: Set up Go 1.13
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
+      id: go
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v1
+    - name: Make linux
+      run: make linux
+    - uses: actions/upload-artifact@v2
+      with:
+        name: linux-build
+        path: build/tinc-desktop-linux64.tar.gz
+
+  macosx:
+    name: Build for MacOSx
+    runs-on: macos-latest
+    steps:
+    - name: Set up Go 1.13
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
+      id: go
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v1
+    - name: Make darwin
+      run: make darwin
+    - uses: actions/upload-artifact@v2
+      with:
+        name: darwin-build
+        path: build/tinc-desktop-darwin64.tar.gz
+
+  windows:
+    name: Build for windows
+    runs-on: windows-latest
+    steps:
+      - name: Set up Go 1.13
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+        id: go
+      - uses: numworks/setup-msys2@v1
+      - name: Install dependencies
+        run: msys2do pacman --noconfirm -S make
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: Make darwin
+        run: msys2do make darwin
+      - uses: actions/upload-artifact@v2
+        with:
+          name: darwin-build
+          path: build/tinc-desktop-win64.tar.gz
+
+  release:
+    name: Release artifacts
+    runs-on: ubuntu-latest
+    needs:
+      - windows
+      - linux
+      - darwin
+    steps:
+      - uses: actions/download-artifact@v2
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload Linux Release
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./tinc-desktop-linux64.tar.gz
+          asset_name: tinc-desktop-linux64.tar.gz
+          asset_content_type: application/tar+gzip
+
+      - name: Upload Darwin Release
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./tinc-desktop-darwin64.tar.gz
+          asset_name: tinc-desktop-darwin64.tar.gz
+          asset_content_type: application/tar+gzip
+
+      - name: Upload Windows Release
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./tinc-desktop-win64.tar.gz
+          asset_name: tinc-desktop-win64.tar.gz
+          asset_content_type: application/tar+gzip
