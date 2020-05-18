@@ -6,7 +6,7 @@ on:
 jobs:
 
   linux:
-    name: Build for linux and windows
+    name: Build for Linux
     runs-on: ubuntu-latest
     steps:
     - name: Install dependencies
@@ -44,7 +44,7 @@ jobs:
         path: build/tinc-desktop-darwin64.tar.gz
 
   windows:
-    name: Build for windows
+    name: Build for Windows
     runs-on: windows-latest
     steps:
       - name: Set up Go 1.13
@@ -57,11 +57,11 @@ jobs:
         run: msys2do pacman --noconfirm -S make
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
-      - name: Make darwin
-        run: msys2do make darwin
+      - name: Make windows
+        run: make windows
       - uses: actions/upload-artifact@v2
         with:
-          name: darwin-build
+          name: windows-build
           path: build/tinc-desktop-win64.tar.gz
 
   release:
