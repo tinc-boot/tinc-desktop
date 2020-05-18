@@ -34,6 +34,11 @@ linux: build
 	go build -ldflags "-s -w" -trimpath -v -o build/linux/tinc-desktop ./cmd/tinc-desktop
 	cd build/linux && tar -zcvf ../tinc-desktop-linux64.tar.gz .
 
+darwin: build
+	mkdir -p build/darwin
+	go build -ldflags "-s -w" -trimpath -v -o build/darwin/tinc-desktop ./cmd/tinc-desktop
+	cd build/darwin && tar -zcvf ../tinc-desktop-darwin64.tar.gz .
+
 windows: build rsrc
 	mkdir -p build/windows
 	rm -rf fyne-cross
@@ -42,12 +47,6 @@ windows: build rsrc
 	rm tinc-desktop.syso
 	cp -r assets/windows/. build/windows/
 	cd build/windows && powershell "Compress-Archive tinc-desktop.exe ../tinc-desktop-win64.zip"
-
-darwin: build
-	mkdir -p build/darwin
-	go build -ldflags "-s -w" -trimpath -v -o build/darwin/tinc-desktop ./cmd/tinc-desktop
-	cd build/darwin && tar -zcvf ../tinc-desktop-darwin64.tar.gz .
-
 
 install: linux windows darwin
 

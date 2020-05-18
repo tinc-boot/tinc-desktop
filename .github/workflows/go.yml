@@ -62,7 +62,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: windows-build
-          path: build/tinc-desktop-win64.tar.gz
+          path: build/tinc-desktop-win64.zip
 
   release:
     name: Release artifacts
@@ -91,7 +91,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./tinc-desktop-linux64.tar.gz
+          asset_path: ./linux-build
           asset_name: tinc-desktop-linux64.tar.gz
           asset_content_type: application/tar+gzip
 
@@ -102,7 +102,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./tinc-desktop-darwin64.tar.gz
+          asset_path: ./darwin-build
           asset_name: tinc-desktop-darwin64.tar.gz
           asset_content_type: application/tar+gzip
 
@@ -113,6 +113,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./tinc-desktop-win64.zip
+          asset_path: ./windows-build
           asset_name: tinc-desktop-win64.zip
           asset_content_type: application/zip
