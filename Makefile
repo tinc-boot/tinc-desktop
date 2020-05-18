@@ -46,7 +46,7 @@ windows: build rsrc
 	go build -ldflags "-s -w -H=windowsgui" -trimpath -v -o build/windows/tinc-desktop.exe ./cmd/tinc-desktop
 	rm tinc-desktop.syso
 	cp -r assets/windows/. build/windows/
-	cd build/windows && powershell "Compress-Archive tinc-desktop.exe ../tinc-desktop-win64.zip"
+	cd build/windows && powershell "Compress-Archive * ../tinc-desktop-win64.zip"
 
 install: linux windows darwin
 
