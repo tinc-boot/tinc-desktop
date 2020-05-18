@@ -132,7 +132,7 @@ func (sc *screenNetwork) listActivePeers(container *widget.Box) {
 	peers, err := ntw.API().Peers(sc.Ctx)
 	updateDialog.Hide()
 	if err != nil {
-		dialog.NewInformation("Failed", err.Error(), sc.Window).Show()
+		log.Println("list active peers:", err)
 		return
 	}
 
@@ -165,7 +165,7 @@ func (sc *screenNetwork) start() {
 	if err != nil {
 		startingDialog.Hide()
 		log.Println("start", sc.Network.Name(), err)
-		dialog.NewInformation("Failed", err.Error(), sc.Window).Show()
+		dialog.NewInformation("Failed to start", err.Error(), sc.Window).Show()
 		return
 	}
 	startingDialog.Hide()
