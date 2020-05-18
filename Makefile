@@ -38,7 +38,7 @@ windows: build rsrc
 	mkdir -p build/windows
 	rm -rf fyne-cross
 	rsrc -manifest assets/admin.xml -o tinc-desktop.syso
-	go build -ldflags "-s -w"  -H=windowsgui -trimpath -v -o build/windows/tinc-desktop.exe ./cmd/tinc-desktop
+	go build -ldflags "-s -w -H=windowsgui" -trimpath -v -o build/windows/tinc-desktop.exe ./cmd/tinc-desktop
 	rm tinc-desktop.syso
 	cp -r assets/windows/. build/windows/
 	cd build/windows && zip -r ../tinc-desktop-win64.zip .
