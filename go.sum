@@ -76,6 +76,8 @@ github.com/tinc-boot/tincd v0.0.0-20200518074105-a14c3d23f18b h1:2C98VzbffZIvnjy
 github.com/tinc-boot/tincd v0.0.0-20200518074105-a14c3d23f18b/go.mod h1:u3LBAW9fDGldmIA0YAYYyPxu6WzpVJ0U9HeW97e8f9c=
 github.com/tinc-boot/tincd v0.0.0-20200518084530-0f53ed602c71 h1:F0+mQ27JI4JLaG1kIWoR9xisB5m3EDuQez5huNPzZqI=
 github.com/tinc-boot/tincd v0.0.0-20200518084530-0f53ed602c71/go.mod h1:u3LBAW9fDGldmIA0YAYYyPxu6WzpVJ0U9HeW97e8f9c=
+github.com/tinc-boot/tincd v0.0.0-20200518124055-c1f9617bc3f1 h1:Jb+hW16kYrgD1lVq7SMV7Wxa52BT5x8KVmiF8LSr46w=
+github.com/tinc-boot/tincd v0.0.0-20200518124055-c1f9617bc3f1/go.mod h1:u3LBAW9fDGldmIA0YAYYyPxu6WzpVJ0U9HeW97e8f9c=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
 golang.org/x/image v0.0.0-20190802002840-cff245a6509b h1:+qEpEAPhDZ1o0x3tHzZTQDArnOixOzGD9HUJfcg0mb4=

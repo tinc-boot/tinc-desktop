@@ -1,7 +1,5 @@
 export PATH := $(shell go env GOPATH)/bin:$(PATH)
 
-all: clean install
-
 fyne:
 ifeq (, $(shell which fyne))
 	go get -v fyne.io/fyne/cmd/fyne
@@ -48,6 +46,3 @@ windows: build rsrc
 	cp -r assets/windows/. build/windows/
 	cd build/windows && powershell "Compress-Archive * ../tinc-desktop-win64.zip"
 
-install: linux windows darwin
-
-.PHONY: all

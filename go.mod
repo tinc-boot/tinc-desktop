@@ -8,5 +8,5 @@ require (
 	github.com/pkg/browser v0.0.0-20180916011732-0a3d74bf9ce4
 	github.com/reddec/jsonrpc2 v0.1.18-0.20200514125425-e010095d0a08
 	github.com/theckman/go-flock v0.7.1 // indirect
-	github.com/tinc-boot/tincd v0.0.0-20200518084530-0f53ed602c71
+	github.com/tinc-boot/tincd v0.0.0-20200518124055-c1f9617bc3f1
 )

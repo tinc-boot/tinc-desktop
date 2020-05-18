@@ -4,6 +4,7 @@ import (
 	"github.com/tinc-boot/tinc-desktop/cmd/tinc-desktop/internal"
 	"github.com/tinc-boot/tinc-desktop/cmd/tinc-desktop/internal/api"
 	"github.com/tinc-boot/tinc-desktop/sudo"
+	"github.com/tinc-boot/tincd/utils"
 	"math/rand"
 	"os"
 	"os/exec"
@@ -24,7 +25,7 @@ func (sp *SubProcess) Spawn(network string, done chan<- error) (internal.Port, e
 	var arguments = []string{executable, "-c", sp.ConfigLocation, "-p", strconv.Itoa(port), "-n", network}
 	cmdParams := sudo.WithSudo(arguments)
 	cmd := exec.Command(cmdParams[0], cmdParams[1:]...)
-
+	utils.SetCmdAttrs(cmd)
 	err = cmd.Start()
 	if err != nil {
 		return nil, err
