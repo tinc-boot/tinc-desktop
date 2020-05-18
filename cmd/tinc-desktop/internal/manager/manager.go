@@ -40,7 +40,8 @@ func (mgr *Manager) SpawnSudoContext(name string) (internal.Port, error) {
 		mgr.workers = make(map[string]internal.Port)
 	}
 
-	done := make(chan error, 1)
+	done := make(chan struct{})
+
 	wp, err := mgr.Spawner.Spawn(name, done)
 	if err != nil {
 		close(done)
@@ -50,12 +51,13 @@ func (mgr *Manager) SpawnSudoContext(name string) (internal.Port, error) {
 	mgr.workers[name] = wp
 
 	go func() {
-		defer close(done)
-		err := <-done
-		log.Println(name, err)
+		<-done
+		if err := wp.Error(); err != nil {
+			log.Println(name, err)
+		}
 		mgr.lock.Lock()
-		defer mgr.lock.Unlock()
 		delete(mgr.workers, name)
+		mgr.lock.Unlock()
 	}()
 
 	return wp, nil

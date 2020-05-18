@@ -15,7 +15,7 @@ type SubProcess struct {
 	ConfigLocation string
 }
 
-func (sp *SubProcess) Spawn(network string, done chan<- error) (internal.Port, error) {
+func (sp *SubProcess) Spawn(network string, done chan struct{}) (internal.Port, error) {
 	port := 32000 + rand.Intn(32000)
 
 	executable, err := os.Executable()
@@ -33,13 +33,13 @@ func (sp *SubProcess) Spawn(network string, done chan<- error) (internal.Port, e
 
 	wp := &workerPort{
 		client: &api.WorkerClient{BaseURL: "http://127.0.0.1:" + strconv.Itoa(port)},
-		done:   make(chan struct{}),
+		done:   done,
 		name:   network,
 	}
 
 	go func() {
+		wp.err = cmd.Wait()
 		close(wp.done)
-		done <- cmd.Wait()
 	}()
 
 	return wp, nil
@@ -49,8 +49,10 @@ type workerPort struct {
 	client internal.Worker
 	done   chan struct{}
 	name   string
+	err    error
 }
 
+func (wp *workerPort) Error() error          { return wp.err }
 func (wp *workerPort) Name() string          { return wp.name }
 func (wp *workerPort) Done() <-chan struct{} { return wp.done }
 func (wp *workerPort) API() internal.Worker  { return wp.client }

@@ -33,10 +33,16 @@ func (sc *screenNetwork) Show() {
 		sc.start()
 	})
 	if inst := sc.App.Pool.Find(sc.Network.Name()); inst != nil {
-		running = true
-		action = widget.NewToolbarAction(theme.MediaPauseIcon(), func() {
-			sc.stop(inst)
-		})
+		select {
+		case <-inst.Done():
+		default:
+			running = true
+		}
+		if running {
+			action = widget.NewToolbarAction(theme.MediaPauseIcon(), func() {
+				sc.stop(inst)
+			})
+		}
 	}
 
 	sc.toolbar = widget.NewToolbar(
@@ -178,7 +184,6 @@ func (sc *screenNetwork) stop(instance internal.Port) {
 	stoppingDialog := dialog.NewProgressInfinite("Stopping", "stopping...", sc.Window)
 
 	stoppingDialog.Show()
-	defer stoppingDialog.Hide()
 	log.Println("stop", instance.Name())
 	_, _ = instance.API().Kill(context.Background())
 	<-instance.Done()
@@ -186,6 +191,7 @@ func (sc *screenNetwork) stop(instance internal.Port) {
 	sc.toolbar.Items[2] = widget.NewToolbarAction(theme.MediaPlayIcon(), func() {
 		sc.start()
 	})
+	stoppingDialog.Hide()
 	sc.refreshToolbar()
 }
 

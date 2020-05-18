@@ -35,10 +35,11 @@ type Worker interface {
 
 type Port interface {
 	API() Worker
+	Error() error
 	Done() <-chan struct{}
 	Name() string
 }
 
 type Spawner interface {
-	Spawn(network string, done chan<- error) (Port, error)
+	Spawn(network string, done chan struct{}) (Port, error)
 }

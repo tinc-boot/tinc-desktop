@@ -11,7 +11,7 @@ type SameProcess struct {
 	ConfigLocation string
 }
 
-func (sp *SameProcess) Spawn(network string, done chan<- error) (internal.Port, error) {
+func (sp *SameProcess) Spawn(network string, done chan struct{}) (internal.Port, error) {
 	instance, err := tincd.StartFromDir(context.Background(), filepath.Join(sp.ConfigLocation, network), false)
 	if err != nil {
 		return nil, err
@@ -19,14 +19,14 @@ func (sp *SameProcess) Spawn(network string, done chan<- error) (internal.Port, 
 
 	port := &samePort{
 		client: tincdPort{client: instance},
-		done:   make(chan struct{}),
+		done:   done,
 		name:   network,
 	}
 
 	go func() {
 		defer close(port.done)
 		<-instance.Done()
-		done <- instance.Error()
+		port.err = instance.Error()
 	}()
 
 	return port, nil
@@ -36,8 +36,10 @@ type samePort struct {
 	client tincdPort
 	done   chan struct{}
 	name   string
+	err    error
 }
 
+func (wp *samePort) Error() error          { return wp.err }
 func (wp *samePort) Name() string          { return wp.name }
 func (wp *samePort) Done() <-chan struct{} { return wp.done }
 func (wp *samePort) API() internal.Worker  { return &wp.client }
