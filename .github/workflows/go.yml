@@ -25,7 +25,7 @@ jobs:
         name: linux-build
         path: build/tinc-desktop-linux64.tar.gz
 
-  macosx:
+  darwin:
     name: Build for MacOSx
     runs-on: macos-latest
     steps:
