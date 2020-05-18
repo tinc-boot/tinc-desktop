@@ -91,8 +91,8 @@ func (sc *screenNetwork) Show() {
 			}),
 			peers,
 		))
+		sc.listActivePeers(peers)
 	}
-
 	sc.Window.SetContent(widget.NewVBox(elements...))
 }
 
