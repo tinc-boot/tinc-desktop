@@ -113,6 +113,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./tinc-desktop-win64.tar.gz
-          asset_name: tinc-desktop-win64.tar.gz
-          asset_content_type: application/tar+gzip
+          asset_path: ./tinc-desktop-win64.zip
+          asset_name: tinc-desktop-win64.zip
+          asset_content_type: application/zip
